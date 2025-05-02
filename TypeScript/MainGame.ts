@@ -27,3 +27,5 @@ AuraGameInstance.FTsCall.Bind((FunctionName, Object) => {
 })
 
 import "./Blueprints/BP_TestTS";
+import "./Blueprints/Character/Aura/BP_AuraCharacter";
+import "./Blueprints/Character/Goblin_Spear/BP_Goblin_Spear";

@@ -9,7 +9,7 @@
 /**
  * 这是一个游戏角色的基类，用于定义游戏角色的基础属性和方法。
  */
-UCLASS()
+UCLASS(Abstract)
 class AURA_GAME_API AAuraCharacterBase : public ACharacter
 {
 	GENERATED_BODY()
@@ -20,8 +20,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:
-	virtual void Tick(float DeltaTime) override;
-	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	// 武器
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
+	TObjectPtr<USkeletalMeshComponent> Weapon;
 };

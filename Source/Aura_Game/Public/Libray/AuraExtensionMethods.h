@@ -16,6 +16,17 @@ class AURA_GAME_API UAuraExtensionMethods : public UExtensionMethods
 
 public:
 	/**
+	 * 添加输入映射上下文到本地玩家输入子系统
+	 * @param Pawn			 玩家
+	 * @param MappingContext 要添加的输入映射上下文资源
+	 * @param Priority 映射上下文的优先级（数值越大优先级越高）
+	 * @note 此方法会自动获取本地玩家的EnhancedInput子系统
+	 * @see UEnhancedInputLocalPlayerSubsystem
+	 */
+	UFUNCTION(BlueprintCallable, Category="AuraExtensionMethods")
+	static void AddMappingContext(const APawn* Pawn, const UInputMappingContext* MappingContext, int32 Priority);
+
+	/**
 	 * 绑定输入动作
 	 * @param InputComponent 输入组件
 	 * @param InputAction 输入动作

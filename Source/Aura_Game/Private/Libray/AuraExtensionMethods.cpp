@@ -4,7 +4,24 @@
 #include "Libray/AuraExtensionMethods.h"
 
 #include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "Game/AuraGameInstance.h"
+
+// 添加映射上下文
+void UAuraExtensionMethods::AddMappingContext(const APawn* Pawn, const UInputMappingContext* MappingContext, int32 Priority)
+{
+	// 检查输入映射上下文资源是否有效
+	check(MappingContext);
+
+	// 获取本地玩家的增强输入子系统
+	UEnhancedInputLocalPlayerSubsystem* EnhancedSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(Cast<APlayerController>(Pawn->GetController())->GetLocalPlayer());
+
+	// 验证子系统是否成功获取
+	check(EnhancedSubsystem);
+
+	// 添加输入映射上下文到子系统，优先级为0
+	EnhancedSubsystem->AddMappingContext(MappingContext, Priority);
+}
 
 // 绑定动作函数
 void UAuraExtensionMethods::BindAction(UEnhancedInputComponent* InputComponent, const UInputAction* InputAction, const ETriggerEvent TriggerEvent, UObject* Object, const FName& FunctionName)

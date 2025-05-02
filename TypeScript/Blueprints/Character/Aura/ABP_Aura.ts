@@ -15,15 +15,15 @@ export class ABP_Aura implements ABP_Aura {
     // 角色
     Character: BP_AuraCharacter;
 
-    
+
     /**
      * 动画蓝图初始化函数
      * 在动画蓝图首次创建时被调用，用于初始化角色引用
-     * 
+     *
      * 实现逻辑：
      * 1. 通过TryGetPawnOwner获取动画实例所属的Pawn
      * 2. 将Pawn转换为BP_AuraCharacter类型并赋值给Character成员变量
-     * 
+     *
      * @note 这是动画蓝图的标准生命周期函数，由UE引擎自动调用
      */
     BlueprintInitializeAnimation() {
@@ -31,15 +31,15 @@ export class ABP_Aura implements ABP_Aura {
     }
 
 
-      /**
+    /**
      * 动画蓝图更新函数（每帧调用）
      * 计算并更新角色的地面移动速度
-     * 
+     *
      * 实现逻辑：
      * 1. 检查Character引用是否有效
      * 2. 获取角色移动组件的水平速度（忽略Z轴）
      * 3. 将速度值赋给动画蓝图的GroundSpeed变量
-     * 
+     *
      * @param DeltaTimeX 帧时间差（秒）
      * @note 这是动画蓝图的标准更新函数，由UE引擎每帧自动调用
      * @see CharacterMovement 角色的移动组件
@@ -49,6 +49,7 @@ export class ABP_Aura implements ABP_Aura {
     BlueprintUpdateAnimation(DeltaTimeX: number) {
         if (this.Character) {
             this.GroundSpeed = this.Character.CharacterMovement.Velocity.Size2D()
+            this.ShouldMove = this.GroundSpeed > 10
         }
     }
 

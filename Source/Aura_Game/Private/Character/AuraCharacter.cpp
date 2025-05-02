@@ -3,30 +3,28 @@
 
 #include "Character/AuraCharacter.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
 
-// Sets default values
+
 AAuraCharacter::AAuraCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	GetCharacterMovement()->bOrientRotationToMovement = true; // 角色移动时自动调整旋转
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
+	GetCharacterMovement()->bConstrainToPlane = true; // 限制角色移动方向为平面
+	GetCharacterMovement()->bSnapToPlaneAtStart = true; // 角色开始移动时自动调整位置
+
+	// 禁用控制器旋转
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
 }
 
-// Called when the game starts or when spawned
 void AAuraCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
 void AAuraCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
-// Called to bind functionality to input
-void AAuraCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-

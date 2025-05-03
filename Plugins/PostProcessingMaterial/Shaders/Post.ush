@@ -1,0 +1,51 @@
+// 定义常量
+static const float PI = 3.14159265358979323846f;
+static const float TWO_PI = 2.0f * PI;
+
+// 假设 CustomMaterialIndex 是一个自定义模具的索引
+static const int CustomMaterialIndex = 2; // 这里替换为您实际的自定义模具索引
+
+// 初始化累积的样本值
+float CombinedSamples = 0;
+// 初始化偏移方向，用于交替样本方向
+int OffsetDirection = 1;
+// 定义径向增量，用于计算每个样本点的位置
+float RadialIncrement;
+// 定义径向偏移，用于存储每个样本点相对于中心点的偏移量
+float2 RadialOffset;
+// 定义缩放后的样本偏移，用于调整样本点的偏移量以适应当前视图大小
+float2 ScaledSampleOffset;
+
+// 计算缩放后的样本偏移，以适应当前视图大小
+ScaledSampleOffset = View.ViewSizeAndInvSize.zw * ((OutlineSize) * View.ViewSizeAndInvSize.x / 2560);
+
+// 检查 RadialSamples 是否为零以避免除以零的错误
+if (RadialSamples == 0)
+{
+    saturate(CombinedSamples); // 或者您可以选择返回一个默认值，比如 0 或 1
+}
+
+// 计算径向增量的步长，避免在循环中重复计算
+float RadialIncrementStep = 0.5 / RadialSamples;
+
+// 遍历每个径向样本点
+for (int i = 1; i < RadialSamples + 1; ++i)
+{
+    // 计算当前样本点的径向增量
+    RadialIncrement = RadialIncrementStep * i;
+    // 根据径向增量计算当前样本点的偏移量
+    RadialOffset.x = cos(RadialIncrement * TWO_PI);
+    RadialOffset.y = sin(RadialIncrement * TWO_PI);
+    
+    // 累积样本值，计算当前样本点的深度值并进行饱和操作
+    CombinedSamples += saturate(1 - (floor(SceneTextureLookup(ClampSceneTextureUV(ViewportUVToSceneTextureUV(GetViewportUV(Parameters) + Noise + ScaledSampleOffset * RadialOffset * OffsetDirection, 13), 13), 13, false).r / RenderDistance)));
+	
+    // 反转偏移方向，用于下一个样本点
+    OffsetDirection *= -1;
+}
+
+// 计算平均样本值
+CombinedSamples /= RadialSamples;
+
+// 返回平均样本值
+return saturate(CombinedSamples);

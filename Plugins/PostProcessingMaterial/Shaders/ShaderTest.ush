@@ -1,0 +1,9 @@
+/*float a = A;
+float b = B;
+
+float c = a + b;
+
+return c;*/
+
+float4 TAASample = saturate(1 - float(SceneTextureLookup(ClampSceneTextureUV(ViewportUVToSceneTextureUV(GetViewportUV(Parameters) + float2(0.1, 0), 13), 13), 13, false).r / 6000000));
+return TAASample;

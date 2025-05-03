@@ -3,6 +3,7 @@
 
 #include "Character/AuraCharacter.h"
 
+#include "Aura_Game.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -17,6 +18,11 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	GetMesh()->SetRenderCustomDepth(true);
+	Weapon->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_GREE);
+	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_GREE);
 }
 
 void AAuraCharacter::BeginPlay()

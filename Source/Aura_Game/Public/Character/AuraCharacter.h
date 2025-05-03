@@ -17,6 +17,15 @@ class AURA_GAME_API AAuraCharacter : public AAuraCharacterBase
 public:
 	AAuraCharacter();
 
+	// 当玩家被控制时，调用此函数
+	virtual void PossessedBy(AController* NewController) override;
+	// 当玩家状态被重置时，调用此函数
+	virtual void OnRep_PlayerState() override;
+
+private:
+	// 初始化能力信息
+	void InitAbilityActorInfo();
+
 protected:
 	virtual void BeginPlay() override;
 

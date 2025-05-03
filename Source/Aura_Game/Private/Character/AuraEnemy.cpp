@@ -34,4 +34,6 @@ void AAuraEnemy::UnHighLightActor()
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);// 初始化角色信息
 }

@@ -6,6 +6,8 @@
 #include "GameFramework/HUD.h"
 #include "AuraHUD.generated.h"
 
+struct FWidgetControllerParams;
+class UOverlayWidgetController;
 class UAuraUserWidget;
 /**
  * Aura的HUD类，用于处理游戏界面的显示和交互。
@@ -16,15 +18,27 @@ class AURA_GAME_API AAuraHUD : public AHUD
 	GENERATED_BODY()
 
 public:
-	// 显示小组件
+	// 覆加在组界面的小组件
 	UPROPERTY()
 	TObjectPtr<UAuraUserWidget> OverlayWidget;
 
+	// 获取OverlayWidgetController
+	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
+
+	// 初始化Overlay
+	void InitOverlay(class APlayerController* PC, class APlayerState* PS, class UAbilitySystemComponent* ASC, class UAttributeSet* AS);
+
 protected:
-	virtual void BeginPlay() override;
 
 private:
-	// 小组件类
+	// 覆盖式小部件类
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UAuraUserWidget> OverlayWidgetClass;
+
+	// 覆盖式小部件控制器
+	UPROPERTY()
+	TObjectPtr<UOverlayWidgetController> OverlayWidgetController;
+	// 覆盖式小部件控制器类
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
 };

@@ -46,5 +46,4 @@ private:
 	IEnemyInterface* LastActor;
 	// 当前帧鼠标悬停的敌人接口指针
 	IEnemyInterface* ThisActor;
-
 };

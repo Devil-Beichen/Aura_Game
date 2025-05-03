@@ -6,7 +6,9 @@
 #include "AbilitySystemComponent.h"
 #include "Aura_Game.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
+#include "UI/HUD/AuraHUD.h"
 
 
 AAuraCharacter::AAuraCharacter()
@@ -42,14 +44,41 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+// 初始化能力系统参与者信息
+// 该方法在服务器端(PossessedBy)和客户端(OnRep_PlayerState)都会被调用
+// 主要功能：
+// 1. 初始化AbilitySystemComponent的Actor信息
+// 2. 设置本地AbilitySystemComponent和AttributeSet引用
+// 3. 初始化HUD的Overlay界面
 void AAuraCharacter::InitAbilityActorInfo()
 {
-	if (AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>())
+	// 获取AuraPlayerState实例
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState) // 确保PlayerState有效
+
+	// 初始化AbilitySystemComponent的Actor信息
+	// 参数说明：
+	// - AuraPlayerState: 作为OwnerActor
+	// - this: 作为AvatarActor
+	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+
+	// 设置本地引用
+	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+	AttributeSet = AuraPlayerState->GetAttributeSet();
+
+	// 初始化HUD Overlay界面
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
-		check(AuraPlayerState)
-		AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-		AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-		AttributeSet = AuraPlayerState->GetAttributeSet();
+		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+		{
+			// 初始化Overlay界面
+			// 参数说明：
+			// - AuraPlayerController: 玩家控制器
+			// - AuraPlayerState: 玩家状态
+			// - AbilitySystemComponent: 能力系统组件
+			// - AttributeSet: 属性集
+			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		}
 	}
 }
 

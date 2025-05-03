@@ -21,14 +21,11 @@ void AAuraPlayerController::BeginPlay()
 	check(AuraContext);
 
 	// 获取本地玩家的增强输入子系统
-	UEnhancedInputLocalPlayerSubsystem* EnhancedSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-
-	// 验证子系统是否成功获取
-	check(EnhancedSubsystem);
-
-	// 添加输入映射上下文到子系统，优先级为0
-	EnhancedSubsystem->AddMappingContext(AuraContext, 0);
-
+	if (UEnhancedInputLocalPlayerSubsystem* EnhancedSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		// 添加输入映射上下文到子系统，优先级为0
+		EnhancedSubsystem->AddMappingContext(AuraContext, 0);
+	}
 	// 设置鼠标显示状态
 	bShowMouseCursor = true; // 显示鼠标光标
 	DefaultMouseCursor = EMouseCursor::Default; // 使用默认光标样式

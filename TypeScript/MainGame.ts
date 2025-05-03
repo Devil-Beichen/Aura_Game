@@ -32,3 +32,4 @@ import "./Blueprints/Character/Goblin_Spear/BP_Goblin_Spear";
 import "./Blueprints/Character/Aura/ABP_Aura";
 import "./Blueprints/Character/ABP_Enemy";
 import "./Blueprints/Character/Goblin_Slingshot/BP_Goblin_Slingshot";
+import "./Blueprints/Character/BP_EnemyBase";

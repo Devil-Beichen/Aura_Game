@@ -1,5 +1,6 @@
 ﻿import * as UE from "ue";
 import mixin from "../../../mixin";
+import {BP_EnemyBase} from "../BP_EnemyBase";
 
 // 资产路径
 const AssetPath = "/Game/Blueprints/Character/Goblin_Spear/BP_Goblin_Spear.BP_Goblin_Spear_C";
@@ -10,5 +11,5 @@ export interface BP_Goblin_Spear extends UE.Game.Blueprints.Character.Goblin_Spe
 
 // 创建一个继承ts的本体类    implements   实现类型提示
 @mixin(AssetPath)
-export class BP_Goblin_Spear implements BP_Goblin_Spear {
+export class BP_Goblin_Spear extends BP_EnemyBase implements BP_Goblin_Spear {
 }

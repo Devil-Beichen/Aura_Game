@@ -3,15 +3,29 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "Aura_Game.h"
+
 
 AAuraEnemy::AAuraEnemy()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+}
+
+void AAuraEnemy::HighLightActor()
+{
+	GetMesh()->SetRenderCustomDepth(true);
+	Weapon->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+}
+
+void AAuraEnemy::UnHighLightActor()
+{
+	GetMesh()->SetRenderCustomDepth(false);
+	Weapon->SetRenderCustomDepth(false);
 }
 
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
-

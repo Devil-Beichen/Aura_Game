@@ -5,9 +5,11 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
+	PrimaryActorTick.bCanEverTick = true; // 确保玩家控制器每帧都会执行Tick函数
 	bReplicates = true; // 确保玩家控制器在服务器和客户端之间同步
 }
 
@@ -36,6 +38,53 @@ void AAuraPlayerController::BeginPlay()
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); // 不锁定鼠标到视口
 	InputModeData.SetHideCursorDuringCapture(false); // 捕获输入时不隐藏光标
 	SetInputMode(InputModeData); // 应用配置好的输入模式
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	CursorTrace();
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) return;
+
+	LastActor = ThisActor;
+	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+
+	/**
+	 *	在光标命中处，存在多种情况
+	 *	A.	LastActor和ThisActor都为空
+	 *		-	什么都不做
+	 *	B.	LastActor为空 ThisActor有效
+	 *		-	ThisActor高亮显示
+	 *	C.	LastActor有效 ThisActor为空
+	 *		-	LastActor取消高亮显示
+	 *	D.	LastActor和ThisActor都有效，但是 LastActor != ThisActor
+	 *		-	LastActor取消高亮显示，LastActor高亮显示
+	 *	E.	LastActor和ThisActor都有效
+	 *		-	什么都不做
+	 */
+
+	if (LastActor == nullptr && ThisActor)
+	{
+		// B
+		ThisActor->HighLightActor();
+	}
+	else if (LastActor && ThisActor == nullptr)
+	{
+		// C
+		LastActor->UnHighLightActor();
+	}
+	else if (LastActor && ThisActor && LastActor != ThisActor)
+	{
+		// D
+		LastActor->UnHighLightActor();
+		ThisActor->HighLightActor();
+	}
 }
 
 void AAuraPlayerController::SetupInputComponent()

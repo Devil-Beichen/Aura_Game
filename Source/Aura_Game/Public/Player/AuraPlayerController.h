@@ -9,6 +9,7 @@
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
+class IEnemyInterface;
 /**
  * 玩家控制器
  */
@@ -19,6 +20,8 @@ class AURA_GAME_API AAuraPlayerController : public APlayerController
 
 public:
 	AAuraPlayerController();
+
+	virtual void PlayerTick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -35,4 +38,13 @@ private:
 	// 移动
 	UFUNCTION()
 	void Move(const FInputActionValue& InputActionValue);
+
+	// 鼠标追踪
+	void CursorTrace();
+
+	// 上一帧鼠标悬停的敌人接口指针
+	IEnemyInterface* LastActor;
+	// 当前帧鼠标悬停的敌人接口指针
+	IEnemyInterface* ThisActor;
+
 };

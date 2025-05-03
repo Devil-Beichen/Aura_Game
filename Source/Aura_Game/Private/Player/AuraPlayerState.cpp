@@ -11,6 +11,9 @@ AAuraPlayerState::AAuraPlayerState()
 	NetUpdateFrequency = 100.f; // 设置网络更新频率为100Hz
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
+	// 设置复制模式为混合模式
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 

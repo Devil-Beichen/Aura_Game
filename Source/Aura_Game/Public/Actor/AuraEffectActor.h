@@ -23,13 +23,13 @@ protected:
 
 	/**
 	 * 应用效果到目标
-	 * @param Target				目标 
+	 * @param TargetActor			目标 
 	 * @param GameplayEffClass		效果类
 	 */
 	UFUNCTION(BlueprintCallable)
-	void ApplyEffectToTarget(AActor* Target, const TSubclassOf<UGameplayEffect> GameplayEffClass) const;
+	void ApplyEffectToTarget(AActor* TargetActor, const TSubclassOf<UGameplayEffect> GameplayEffClass) const;
 
 	// 一个即时游戏效果
-	UPROPERTY(EditAnywhere, Category="Applied Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effect")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
 };

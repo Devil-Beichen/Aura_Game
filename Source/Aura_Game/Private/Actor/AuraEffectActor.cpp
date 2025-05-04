@@ -21,7 +21,7 @@ void AAuraEffectActor::BeginPlay()
 /**
  * 对目标Actor应用游戏效果(GameplayEffect)
  * 
- * @param Target 要应用效果的目标Actor，必须具有AbilitySystemComponent组件
+ * @param TargetActor 要应用效果的目标Actor，必须具有AbilitySystemComponent组件
  * @param GameplayEffClass 要应用的UGameplayEffect子类，定义效果的具体行为
  * 
  * 实现流程：
@@ -30,10 +30,10 @@ void AAuraEffectActor::BeginPlay()
  * 3. 创建效果规格(EffectSpec)，包含效果的具体参数
  * 4. 将效果应用到目标自身
  */
-void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, const TSubclassOf<UGameplayEffect> GameplayEffClass) const
+void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, const TSubclassOf<UGameplayEffect> GameplayEffClass) const
 {
 	// 获取目标Actor的能力系统组件
-	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetASC == nullptr)return;
 
 	checkf(GameplayEffClass, *FString::Printf(TEXT("%s:没有设置对应效果类"),*this->GetName()));

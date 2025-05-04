@@ -1,6 +1,7 @@
 ﻿import * as UE from "ue";
 import mixin from "../../../mixin";
 import {WBP_GlobeProgressBar} from "./WBP_GlobeProgressBar";
+import {BP_OverlayWidgetController} from "../WidgetController/BP_OverlayWidgetController";
 
 // 资产路径
 const AssetPath = "/Game/Blueprints/UI/ProgressBar/WBP_ManaGlobe.WBP_ManaGlobe_C";
@@ -18,9 +19,9 @@ export class WBP_ManaGlobe extends WBP_GlobeProgressBar implements WBP_ManaGlobe
 
     // 控制器完成设置
     WidgetControllerSet() {
-        super.WidgetControllerSet()
-        this.BP_OverlayWidgetController.OnManaChanged.Add((...args) => this.OnCurrentChanged(...args))
-        this.BP_OverlayWidgetController.OnMaxManaChanged.Add((...args) => this.OnMaxChanged(...args))
+        this.OverlayWidgetController = this.WidgetController as BP_OverlayWidgetController
+        this.OverlayWidgetController.OnManaChanged.Add((...args) => this.OnCurrentChanged(...args))
+        this.OverlayWidgetController.OnMaxManaChanged.Add((...args) => this.OnMaxChanged(...args))
     }
 
     // 监听当前属性变化

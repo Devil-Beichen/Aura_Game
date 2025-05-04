@@ -38,3 +38,4 @@ import "./Blueprints/UI/Overlay/WBP_Overlay";
 import "./Blueprints/UI/ProgressBar/WBP_HealthGlobe";
 import "./Blueprints/UI/ProgressBar/WBP_ManaGlobe";
 import "./Blueprints/UI/WidgetController/BP_OverlayWidgetController";
+import "./Blueprints/Actor/BP_HealthPotion";

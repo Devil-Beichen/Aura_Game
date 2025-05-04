@@ -14,12 +14,7 @@ export interface WBP_GlobeProgressBar extends UE.Game.Blueprints.UI.ProgressBar.
 export class WBP_GlobeProgressBar implements WBP_GlobeProgressBar {
 
     // 蓝图OverlayWidgetController
-    BP_OverlayWidgetController: BP_OverlayWidgetController;
-
-    // 控制器完成设置
-    WidgetControllerSet() {
-        this.BP_OverlayWidgetController = this.WidgetController as BP_OverlayWidgetController
-    }
+    OverlayWidgetController: BP_OverlayWidgetController;
 
     // 设置进度条百分比
     SetProgressBarPercent(Percent: number) {

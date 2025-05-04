@@ -1,6 +1,7 @@
 ﻿import * as UE from "ue";
 import mixin from "../../../mixin";
 import {WBP_GlobeProgressBar} from "./WBP_GlobeProgressBar";
+import {BP_OverlayWidgetController} from "../WidgetController/BP_OverlayWidgetController";
 
 
 // 资产路径
@@ -19,9 +20,9 @@ export class WBP_HealthGlobe extends WBP_GlobeProgressBar implements WBP_HealthG
 
     // 控制器完成设置
     WidgetControllerSet() {
-        super.WidgetControllerSet()
-        this.BP_OverlayWidgetController.OnHealthChanged.Add((...args) => this.OnCurrentChanged(...args))
-        this.BP_OverlayWidgetController.OnMaxHealthChanged.Add((...args) => this.OnMaxChanged(...args))
+        this.OverlayWidgetController = this.WidgetController as BP_OverlayWidgetController
+        this.OverlayWidgetController.OnHealthChanged.Add((...args) => this.OnCurrentChanged(...args))
+        this.OverlayWidgetController.OnMaxHealthChanged.Add((...args) => this.OnMaxChanged(...args))
     }
 
     // 监听当前属性变化

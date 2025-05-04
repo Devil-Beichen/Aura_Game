@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "AuraEffectActor.generated.h"
 
-class USphereComponent;
+class UGameplayEffect;
 /**
  * 产生特殊效果的Actor
  */
@@ -18,32 +18,18 @@ class AURA_GAME_API AAuraEffectActor : public AActor
 public:
 	AAuraEffectActor();
 
-	// 开始重叠
-	UFUNCTION()
-	virtual void OnOverlap(
-		UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult);
-
-	// 结束重叠
-	UFUNCTION()
-	virtual void EndOverlap(
-		UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex);
-
 protected:
 	virtual void BeginPlay() override;
 
-private:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> Sphere;
+	/**
+	 * 应用效果到目标
+	 * @param Target				目标 
+	 * @param GameplayEffClass		效果类
+	 */
+	UFUNCTION(BlueprintCallable)
+	void ApplyEffectToTarget(AActor* Target, const TSubclassOf<UGameplayEffect> GameplayEffClass) const;
 
-	// 静态网格组件
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UStaticMeshComponent> Mesh;
+	// 一个即时游戏效果
+	UPROPERTY(EditAnywhere, Category="Applied Effect")
+	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
 };

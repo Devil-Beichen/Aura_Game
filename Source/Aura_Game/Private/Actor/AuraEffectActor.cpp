@@ -3,45 +3,48 @@
 
 #include "Actor/AuraEffectActor.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystemInterface.h"
-#include "AbilitySystem/AuraAttributeSet.h"
-#include "Components/SphereComponent.h"
 
 
 AAuraEffectActor::AAuraEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	SetRootComponent(Mesh);
-
-	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
-	Sphere->SetupAttachment(Mesh);
-	Sphere->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
-}
-
-void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//TODO: 将其更改为应用Gameplay Effect效果。 目前, 使用const_cast作为权宜之计
-
-	if (IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor))
-	{
-		const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
-		UAuraAttributeSet* MutableAuraAttributeSet = const_cast<UAuraAttributeSet*>(AuraAttributeSet);
-		MutableAuraAttributeSet->SetHealth(MutableAuraAttributeSet->GetHealth() + 25.f);
-		MutableAuraAttributeSet->SetMana(MutableAuraAttributeSet->GetMana() + 25.f);
-		Destroy();
-	}
-}
-
-void AAuraEffectActor::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
 }
 
 void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
-	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::OnOverlap);
-	Sphere->OnComponentEndOverlap.AddDynamic(this, &AAuraEffectActor::EndOverlap);
+}
+
+/**
+ * 对目标Actor应用游戏效果(GameplayEffect)
+ * 
+ * @param Target 要应用效果的目标Actor，必须具有AbilitySystemComponent组件
+ * @param GameplayEffClass 要应用的UGameplayEffect子类，定义效果的具体行为
+ * 
+ * 实现流程：
+ * 1. 从目标Actor获取能力系统组件(ASC)
+ * 2. 创建效果上下文(EffectContext)，设置效果来源
+ * 3. 创建效果规格(EffectSpec)，包含效果的具体参数
+ * 4. 将效果应用到目标自身
+ */
+void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, const TSubclassOf<UGameplayEffect> GameplayEffClass) const
+{
+	// 获取目标Actor的能力系统组件
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	if (TargetASC == nullptr)return;
+
+	checkf(GameplayEffClass, *FString::Printf(TEXT("%s:没有设置对应效果类"),*this->GetName()));
+
+	// 创建效果上下文并设置来源对象
+	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+
+	// 创建效果规格(Level设为1.0f)
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffClass, 1.f, EffectContextHandle);
+
+	// 将效果应用到目标自身
+	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }

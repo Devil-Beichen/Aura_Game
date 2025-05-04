@@ -21,7 +21,7 @@ export class BP_PotionBase implements BP_PotionBase {
     SphereBeginOverlay(OverlappedComponent: $Nullable<UE.PrimitiveComponent>, OtherActor: $Nullable<UE.Actor>, OtherComp: $Nullable<UE.PrimitiveComponent>, OtherBodyIndex: number, bFromSweep: boolean, SweepResult: UE.HitResult) {
 
         if (OtherActor == this) return
-        this.ApplyEffectToTarget(OtherActor, this.InstantGameplayEffectClass)
+        this.ApplyEffectToTarget(OtherActor, this.GameplayEffectClass)
 
         this.K2_DestroyActor()
     }

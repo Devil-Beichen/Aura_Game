@@ -26,10 +26,10 @@ public:
 
 protected:
 	// 技能系统组件
-	UPROPERTY()
+	UPROPERTY(VisibleDefaultsOnly)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	// 属性集
-	UPROPERTY()
+	UPROPERTY(VisibleDefaultsOnly)
 	TObjectPtr<UAttributeSet> AttributeSet;
 };

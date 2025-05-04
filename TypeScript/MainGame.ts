@@ -34,3 +34,7 @@ import "./Blueprints/Character/ABP_Enemy";
 import "./Blueprints/Character/Goblin_Slingshot/BP_Goblin_Slingshot";
 import "./Blueprints/Character/BP_EnemyBase";
 import "./Blueprints/UI/ProgressBar/WBP_GlobeProgressBar";
+import "./Blueprints/UI/Overlay/WBP_Overlay";
+import "./Blueprints/UI/ProgressBar/WBP_HealthGlobe";
+import "./Blueprints/UI/ProgressBar/WBP_ManaGlobe";
+import "./Blueprints/UI/WidgetController/BP_OverlayWidgetController";

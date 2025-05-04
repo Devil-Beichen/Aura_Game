@@ -50,7 +50,10 @@ void AAuraHUD::InitOverlay(class APlayerController* PC, class APlayerState* PS, 
 	// 设置小部件的控制器
 	// 这样小部件就能通过控制器与游戏的其他部分交互
 	OverlayWidget->SetWidgetController(WidgetController);
-	
+
+	// 广播初始值
+	WidgetController->BroadcastInitialValues();
+
 	// 将小部件添加到视口
 	// 使其在屏幕上可见
 	Widget->AddToViewport();

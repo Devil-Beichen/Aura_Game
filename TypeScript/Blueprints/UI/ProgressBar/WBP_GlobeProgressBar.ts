@@ -1,6 +1,6 @@
 ﻿import * as UE from "ue";
 import mixin from "../../../mixin";
-import {Brush} from "ue";
+import {BP_OverlayWidgetController} from "../WidgetController/BP_OverlayWidgetController";
 
 // 资产路径
 const AssetPath = "/Game/Blueprints/UI/ProgressBar/WBP_GlobeProgressBar.WBP_GlobeProgressBar_C";
@@ -12,22 +12,17 @@ export interface WBP_GlobeProgressBar extends UE.Game.Blueprints.UI.ProgressBar.
 // 创建一个继承ts的本体类    implements   实现类型提示
 @mixin(AssetPath)
 export class WBP_GlobeProgressBar implements WBP_GlobeProgressBar {
-   /* PreConstruct(IsDesignTime: boolean) {
 
-        this.UpdateBoxSize()
-        this.UpdateBackgroundBrush()
+    // 蓝图OverlayWidgetController
+    BP_OverlayWidgetController: BP_OverlayWidgetController;
 
-
-    }*/
-
-    /*// 刷新大小
-    UpdateBoxSize() {
-        this.SizeBoxRoot.SetWidthOverride(this.BoxWidth)
-        this.SizeBoxRoot.SetHeightOverride(this.BoxHeight)
+    // 控制器完成设置
+    WidgetControllerSet() {
+        this.BP_OverlayWidgetController = this.WidgetController as BP_OverlayWidgetController
     }
 
-    // 更新背景画布
-    UpdateBackgroundBrush() {
-        this.ImageBackground.SetBrush(this.BackgroundBrush)
-    }*/
-}
+    // 设置进度条百分比
+    SetProgressBarPercent(Percent: number) {
+        this.ProgressBar_Globe.SetPercent(Percent)
+    }
+} 

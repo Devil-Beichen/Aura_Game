@@ -17,7 +17,7 @@ struct FWidgetControllerParams
 	FWidgetControllerParams()
 	{
 	}
-	
+
 	FWidgetControllerParams(class APlayerController* PC, class APlayerState* PS, class UAbilitySystemComponent* ASC, class UAttributeSet* AS)
 		: PlayerController(PC), PlayerState(PS), AbilitySystemComponent(ASC), AttributeSet(AS)
 	{
@@ -52,6 +52,12 @@ public:
 	// 设置用户界面控制器的参数，包括玩家控制器、玩家状态、能力系统组件和属性集
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
+
+	// 广播初始化值，用于在界面加载时初始化数据
+	virtual void BroadcastInitialValues();
+
+	// 绑定回调，用于在依赖项发生变化时更新界面
+	virtual void BindCallbacksToDependencies();
 
 protected:
 	// 玩家控制器引用，用于处理玩家输入和界面交互

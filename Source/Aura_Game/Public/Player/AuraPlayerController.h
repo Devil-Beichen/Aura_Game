@@ -43,7 +43,7 @@ private:
 	void CursorTrace();
 
 	// 上一帧鼠标悬停的敌人接口指针
-	IEnemyInterface* LastActor;
+	IEnemyInterface* LastActor = nullptr;
 	// 当前帧鼠标悬停的敌人接口指针
-	IEnemyInterface* ThisActor;
+	IEnemyInterface* ThisActor = nullptr;
 };

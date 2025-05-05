@@ -12,10 +12,18 @@ export interface WBP_EffectMessage extends UE.Game.Blueprints.UI.Overlay.SubWidg
 @mixin(AssetPath)
 export class WBP_EffectMessage implements WBP_EffectMessage {
 
+    // 设置图标和文本
     SetBrushAndText(Image: UE.Texture2D, Text: string) {
-
-        this.Image_Icon.SetBrushFromTexture(Image)
-        this.ImageSizeSet()
         this.Text_Message.SetText(Text)
+        if (Image) {
+            this.ImageSizeSet()
+            this.Image_Icon.SetBrushFromTexture(Image)
+        }
+        this.PlayAnimationForward(this.MessageAnimation, (1 / 0.7))
+
+        setTimeout(() => {
+            this.RemoveFromParent()
+        }, 0.7 * 1000);
+
     }
 }

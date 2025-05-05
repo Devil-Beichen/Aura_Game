@@ -41,3 +41,4 @@ import "./Blueprints/UI/WidgetController/BP_OverlayWidgetController";
 import "./Blueprints/Actor/Potion/BP_PotionBase";
 import "./Blueprints/Actor/Crystal/BP_CrystalBase";
 import "./Blueprints/Actor/Area/BP_AreaBase";
+import "./Blueprints/UI/Overlay/SubWidget/WBP_EffectMessage";

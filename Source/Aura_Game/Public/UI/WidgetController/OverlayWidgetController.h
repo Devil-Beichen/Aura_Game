@@ -4,11 +4,41 @@
 
 #include "CoreMinimal.h"
 #include "AuraWidgetController.h"
+#include "GameplayTagContainer.h"
 #include "OverlayWidgetController.generated.h"
 
+class UAuraUserWidget;
 struct FOnAttributeChangeData;
 // 创建一个动态多播委托复制监听属性发生改变
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
+
+/**
+ * 用于数据表格(DataTable)的UI控件行配置结构
+ * 用于定义游戏中各种UI消息的显示方式和内容
+ */
+USTRUCT(BlueprintType)
+struct FUIWidgetRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	// 消息关联的GameplayTag，用于标识和匹配特定类型的消息
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTag MessageTag = FGameplayTag();
+
+	// 实际显示的文本消息内容
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText Message = FText();
+
+	// 用于显示此消息的自定义Widget类
+	// 可以为不同类型的消息指定不同的显示样式
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UAuraUserWidget> MessageWidget;
+
+	// 用于显示此消息的图标
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* Image = nullptr;
+};
+
 
 /**
  * OverlayWidget的控制器
@@ -41,6 +71,10 @@ public:
 	FOnAttributeChangedSignature OnMaxManaChanged;
 
 protected:
+	// 消息数据表
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
+	TObjectPtr<UDataTable> MessageWidgetDataTable;
+
 	// 监听当前血量
 	void HealthChanged(const FOnAttributeChangeData& Data) const;
 	// 监听最大血量

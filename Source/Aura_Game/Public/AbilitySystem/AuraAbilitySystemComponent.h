@@ -6,6 +6,9 @@
 #include "AbilitySystemComponent.h"
 #include "AuraAbilitySystemComponent.generated.h"
 
+// 声明多播代理（一个参数）
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer&/*AssetTags*/)
+
 /**
  *	艾拉的AbilitySystemComponent
  */
@@ -19,6 +22,9 @@ public:
 
 	// Actor的GAS能力成化设置
 	void AbilityActorInfoSet();
+
+	
+	FEffectAssetTags EffectAssetTags;
 
 protected:
 	virtual void BeginPlay() override;

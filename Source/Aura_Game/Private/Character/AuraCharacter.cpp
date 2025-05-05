@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Aura_Game.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/AuraPlayerController.h"
 #include "Player/AuraPlayerState.h"
@@ -65,6 +66,8 @@ void AAuraCharacter::InitAbilityActorInfo()
 	// 设置本地引用
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet(); // Actor的GAS能力成化设置
 
 	// 初始化HUD Overlay界面
 	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))

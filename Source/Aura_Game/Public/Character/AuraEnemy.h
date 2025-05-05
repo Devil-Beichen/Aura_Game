@@ -27,7 +27,7 @@ public:
 	// 取消高亮显示
 	virtual void UnHighLightActor() override;
 
-	// 高亮显示的标志
-	UPROPERTY(BlueprintReadOnly)
-	uint8 bHightLighted : 1;
+protected:
+	// 初始化能力组件
+	virtual void InitAbilityActorInfo() override;
 };

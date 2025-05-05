@@ -17,6 +17,14 @@ AAuraEnemy::AAuraEnemy()
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 
+
+void AAuraEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+
+	InitAbilityActorInfo();
+}
+
 void AAuraEnemy::HighLightActor()
 {
 	GetMesh()->SetRenderCustomDepth(true);
@@ -31,9 +39,10 @@ void AAuraEnemy::UnHighLightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
-void AAuraEnemy::BeginPlay()
+
+void AAuraEnemy::InitAbilityActorInfo()
 {
-	Super::BeginPlay();
-	
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);// 初始化角色信息
+	AbilitySystemComponent->InitAbilityActorInfo(this, this); // 初始化角色信息
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet(); // Actor的GAS能力成化设置
 }

@@ -24,7 +24,7 @@ public:
 
 private:
 	// 初始化能力信息
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 
 protected:
 	virtual void BeginPlay() override;

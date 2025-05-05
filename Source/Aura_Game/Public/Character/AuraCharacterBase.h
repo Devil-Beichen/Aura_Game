@@ -40,4 +40,7 @@ protected:
 	// 属性集
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	// 初始化能力信息
+	virtual void InitAbilityActorInfo();
 };

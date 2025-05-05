@@ -9,8 +9,6 @@
 
 class UAuraUserWidget;
 struct FOnAttributeChangeData;
-// 创建一个动态多播委托复制监听属性发生改变
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 
 /**
  * 用于数据表格(DataTable)的UI控件行配置结构
@@ -38,6 +36,12 @@ struct FUIWidgetRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Image = nullptr;
 };
+
+// 创建一个动态多播委托复制监听属性发生改变
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
+
+// 创建一个动态多播委托广播UI的数据表
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
 
 
 /**
@@ -70,6 +74,12 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
 	FOnAttributeChangedSignature OnMaxManaChanged;
 
+	/**
+	 * UI数据表消息监听
+	 */
+	UPROPERTY(BlueprintAssignable, Category="GAS|Message")
+	FMessageWidgetRowSignature MessageWidgetRowDelegate;
+
 protected:
 	// 消息数据表
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
@@ -83,4 +93,25 @@ protected:
 	void ManaChanged(const FOnAttributeChangeData& Data) const;
 	// 监听最大魔法值
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
+
+	/**
+	 * 根据标签获取数据表行
+	 * 
+	 * @tparam T 数据表行的类型，通常是一个数据结构
+	 * @param DataTable 数据表对象，从中获取数据
+	 * @param Tag 游戏标签，用于标识特定的数据表行
+	 * @return T* 如果找到匹配的行则返回该行的指针，否则返回nullptr
+	 * 
+	 * 此函数通过游戏标签在指定的数据表中查找对应的行，并返回该行的指针
+	 * 它假设数据表中包含与标签关联的行数据如果标签没有在数据表中找到匹配项，
+	 * 则返回nullptr此函数适用于需要根据标签快速检索数据表行的场景
+	 */
+	template <typename T>
+	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 };
+
+template <typename T>
+T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
+{
+	return DataTable->FindRow<T>(Tag.GetTagName(),TEXT(""));
+}

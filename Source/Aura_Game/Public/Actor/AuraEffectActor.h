@@ -93,6 +93,10 @@ protected:
 	UPROPERTY()
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 
+	// 应用效果的等级
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effect")
+	float ActorLevel = 1.f;
+
 	/*// 一个即时游戏效果
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effect")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;

@@ -14,6 +14,53 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+// 游戏效果的属性
+USTRUCT()
+struct FEffectProperties
+{
+	GENERATED_BODY()
+
+	FEffectProperties()
+	{
+	}
+
+	// 游戏效果上下文句柄，包含效果的应用信息
+	FGameplayEffectContextHandle EffectContextHandle;
+
+	// 来源方的能力系统组件
+	UPROPERTY()
+	UAbilitySystemComponent* SourceASC = nullptr;
+
+	// 来源方的Avatar角色（玩家控制的角色）
+	UPROPERTY()
+	AActor* SourceAvatarActor = nullptr;
+
+	// 来源方的控制器（玩家或AI控制器）
+	UPROPERTY()
+	AController* SourceController = nullptr;
+
+	// 来源方的角色对象
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+
+	// 目标方的能力系统组件
+	UPROPERTY()
+	UAbilitySystemComponent* TargetASC = nullptr;
+
+	// 目标方的Avatar角色（玩家控制的角色）
+	UPROPERTY()
+	AActor* TargetAvatarActor = nullptr;
+
+	// 目标方的控制器（玩家或AI控制器）
+	UPROPERTY()
+	AController* TargetController = nullptr;
+
+	// 目标方的角色对象
+	UPROPERTY()
+	ACharacter* TargetCharacter = nullptr;
+};
+
+
 /**
  * Aura属性集
  */
@@ -24,6 +71,11 @@ class AURA_GAME_API UAuraAttributeSet : public UAttributeSet
 
 public:
 	UAuraAttributeSet();
+	// 预属性更改
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)  override;
+
+	// 游戏效果结束后的执行
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
 	/**
 	 * 生命
@@ -57,6 +109,11 @@ public:
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 
-	// 限制属性值
-	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+private:
+	/**
+	 * 设置游戏效果的属性
+	 * @param Data		 游戏玩法效果回调数据
+	 * @param Props		 游戏效果的属性
+	 */
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 };

@@ -85,15 +85,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;
 
-	// 监听当前血量
-	void HealthChanged(const FOnAttributeChangeData& Data) const;
-	// 监听最大血量
-	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
-	// 监听当前魔法值
-	void ManaChanged(const FOnAttributeChangeData& Data) const;
-	// 监听最大魔法值
-	void MaxManaChanged(const FOnAttributeChangeData& Data) const;
-
 	/**
 	 * 根据标签获取数据表行
 	 * 

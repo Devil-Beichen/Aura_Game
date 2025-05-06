@@ -19,63 +19,62 @@ void UOverlayWidgetController::BroadcastInitialValues()
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const UAuraAttributeSet* AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
-	if (AbilitySystemComponent)
-	{
-		// 绑定OnHealthChanged事件
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::HealthChanged);
-		// 绑定OnMaxHealthChanged事件
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()).AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
-		// 绑定OnManaChanged事件
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute()).AddUObject(this, &UOverlayWidgetController::ManaChanged);
-		// 绑定OnMaxManaChanged事件
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+	if (!AbilitySystemComponent) return;
 
-		Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-			[this](const FGameplayTagContainer& AssetTags)
+	// 绑定OnHealthChanged事件
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (Data.OldValue != Data.NewValue)
 			{
-				for (const FGameplayTag& Tag : AssetTags)
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		}
+	);
+	// 绑定OnMaxHealthChanged事件
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (Data.OldValue != Data.NewValue)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		}
+	);
+	// 绑定OnManaChanged事件
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetManaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (Data.OldValue != Data.NewValue)
+			{
+				OnManaChanged.Broadcast(Data.NewValue);
+			}
+		}
+	);
+	// 绑定OnMaxManaChanged事件
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			if (Data.OldValue != Data.NewValue)
+			{
+				OnMaxManaChanged.Broadcast(Data.NewValue);
+			}
+		}
+	);
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[this](const FGameplayTagContainer& AssetTags)
+		{
+			for (const FGameplayTag& Tag : AssetTags)
+			{
+				// "Message.HealthPotion".MatchesTag("Message") will return True, "Message".MatchesTag("Message.HealthPotion") will return False
+				const FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+				if (Tag.MatchesTag(MessageTag))
 				{
-					// "Message.HealthPotion".MatchesTag("Message") will return True, "Message".MatchesTag("Message.HealthPotion") will return False
-					const FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
-					if (Tag.MatchesTag(MessageTag))
-					{
-						const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
-						MessageWidgetRowDelegate.Broadcast(*Row);
-					}
+					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+					MessageWidgetRowDelegate.Broadcast(*Row);
 				}
 			}
-		);
-	}
-}
-
-void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
-{
-	if (Data.OldValue != Data.NewValue)
-	{
-		OnHealthChanged.Broadcast(Data.NewValue);
-	}
-}
-
-void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
-{
-	if (Data.OldValue != Data.NewValue)
-	{
-		OnMaxHealthChanged.Broadcast(Data.NewValue);
-	}
-}
-
-void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data) const
-{
-	if (Data.OldValue != Data.NewValue)
-	{
-		OnManaChanged.Broadcast(Data.NewValue);
-	}
-}
-
-void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
-{
-	if (Data.OldValue != Data.NewValue)
-	{
-		OnMaxManaChanged.Broadcast(Data.NewValue);
-	}
+		}
+	);
 }

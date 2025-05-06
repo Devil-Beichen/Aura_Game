@@ -49,16 +49,14 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
 
-	/*if (Data.EvaluatedData.Attribute.GetUProperty() == nullptr) return;
-
-	// 属性名
-	FString AttributeName = Data.EvaluatedData.Attribute.GetUProperty()->GetName();
+	if (Data.EvaluatedData.Attribute.GetUProperty() == nullptr) return;
+	
 	// 血量限制
-	if (AttributeName == "Health") SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
-	if (AttributeName == "MaxHealth") SetMaxHealth(FMath::Clamp(GetMaxHealth(), 0.f, GetMaxHealth()));
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute()) SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+	if (Data.EvaluatedData.Attribute == GetMaxHealthAttribute()) SetMaxHealth(FMath::Clamp(GetMaxHealth(), 0.f, GetMaxHealth()));
 	// 魔法值限制
-	if (AttributeName == "Mana") SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
-	if (AttributeName == "MaxMana") SetMaxMana(FMath::Clamp(GetMaxMana(), 0.f, GetMaxMana()));*/
+	if (Data.EvaluatedData.Attribute == GetManaAttribute()) SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	if (Data.EvaluatedData.Attribute == GetMaxManaAttribute()) SetMaxMana(FMath::Clamp(GetMaxMana(), 0.f, GetMaxMana()));
 }
 
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const

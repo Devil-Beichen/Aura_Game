@@ -9,7 +9,7 @@
 /**
  * 艾拉用户小部件
  */
-UCLASS()
+UCLASS(Blueprintable)
 class AURA_GAME_API UAuraUserWidget : public UUserWidget
 {
 	GENERATED_BODY()

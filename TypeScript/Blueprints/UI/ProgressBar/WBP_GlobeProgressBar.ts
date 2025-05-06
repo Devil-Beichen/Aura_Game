@@ -16,8 +16,40 @@ export class WBP_GlobeProgressBar implements WBP_GlobeProgressBar {
     // 蓝图OverlayWidgetController
     OverlayWidgetController: BP_OverlayWidgetController;
 
+    // 背景进度百分比
+    protected GhostPercentTarget: number;
+
+    // 球体初始化
+    Globelnitialized: boolean = false;
+
+    Tick(MyGeometry: UE.Geometry, InDeltaTime: number) {
+
+        this.SetGhostProgressBarPercent(
+            UE.KismetMathLibrary.FInterpTo(this.ProgressBar_Ghost.Percent, this.GhostPercentTarget, InDeltaTime, 1.5)
+        )
+
+    }
+
     // 设置进度条百分比
     SetProgressBarPercent(Percent: number) {
+        if (!this.Globelnitialized && Percent > 0) {
+            this.Globelnitialized = true
+            this.SetGhostProgressBarPercent(Percent)
+        }
         this.ProgressBar_Globe.SetPercent(Percent)
+        this.GhostPercentSet(Percent)
+    }
+
+    // 背景进度百分比设置
+    GhostPercentSet(Percent: number) {
+
+        setTimeout(() => {
+            this.GhostPercentTarget = Percent
+        }, 0.35 * 1000)
+    }
+
+    // 设置背景进度百分比
+    SetGhostProgressBarPercent(Percent: number) {
+        this.ProgressBar_Ghost.SetPercent(Percent)
     }
 } 

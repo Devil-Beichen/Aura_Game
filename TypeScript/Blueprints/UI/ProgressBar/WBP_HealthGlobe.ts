@@ -18,6 +18,10 @@ export class WBP_HealthGlobe extends WBP_GlobeProgressBar implements WBP_HealthG
     Health: number;
     MaxHealth: number;
 
+    Tick(MyGeometry: UE.Geometry, InDeltaTime: number) {
+        super.Tick(MyGeometry, InDeltaTime);
+    }
+
     // 控制器完成设置
     WidgetControllerSet() {
         this.OverlayWidgetController = this.WidgetController as BP_OverlayWidgetController

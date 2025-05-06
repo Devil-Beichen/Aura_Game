@@ -16,6 +16,10 @@ export class WBP_ManaGlobe extends WBP_GlobeProgressBar implements WBP_ManaGlobe
 
     Mana: number;
     MaxMana: number;
+    
+    Tick(MyGeometry: UE.Geometry, InDeltaTime: number) {
+        super.Tick(MyGeometry, InDeltaTime);
+    }
 
     // 控制器完成设置
     WidgetControllerSet() {

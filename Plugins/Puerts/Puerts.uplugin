@@ -45,6 +45,18 @@
       "Name": "PuertsEditor",
       "Type": "Editor",
       "LoadingPhase": "PostEngineInit"
-    }
+    },
+	{
+		"Name": "AutoMixinEditor",
+		"Type": "Editor",
+		"LoadingPhase": "PostEngineInit",
+		"WhitelistPlatforms": [
+			"Win64",
+			"Android",
+			"Mac",
+			"IOS",
+			"Linux"
+		]
+	}
   ]
 }
